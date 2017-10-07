@@ -1,0 +1,11 @@
+.col {
+    width: 100%;
+    clear: both;
+    height: 10px;
+}
+
+.col .row {
+    float: left;
+    width: 10px;
+    height: 10px;
+}
