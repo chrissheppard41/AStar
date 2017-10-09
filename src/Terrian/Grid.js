@@ -16,30 +16,41 @@ class Grid extends Component {
         for (let i = 0; i < x.length; i++) {
             x[i] = new Array(this.height);
             for(let j = 0; j < x[i].length; j++) {
-                x[i][j] = 0;
+
+                let state = 0;
+                /*if(i === 1 && j === 1) {
+                    state = 1;
+                }*/
+
+                x[i][j] = {state: state, position: {x:i,y:j}, checked: false};
             }
         }
 
         return x;
     }
 
-    startPosition() {
-        this.grid[0][0] = "s";
-    }
-
-    endPosition() {
-        this.grid[15][15] = "e";
-    }
-
     drawGrid() {
         const astar_algor = new Astar(this.grid);
         astar_algor.startPosition(0,0);
-        astar_algor.endPosition(15,15);
+        astar_algor.endPosition(1,1);
         astar_algor.find();
 
-
+        const path = astar_algor.getPath();
+        let path_count = 0;
         return this.grid.map((item, key) => {
-            let output = <div key={key}className="col">{item.map((item_2, key_2) => <div key={key_2} className="row">{item_2}</div>)}</div>;
+            let output = <div key={key} className="col">
+                {item.map((item_2, key_2) => {
+                    let colour = " black";
+                    if(path[path_count] !== undefined) {
+                        if(item_2.position.x === path[path_count].x
+                            && item_2.position.y === path[path_count].y) {
+                            path_count++;
+                            colour = " green";
+                        }
+                    }
+                    return <div key={key_2} className={"row" + colour}>{item_2.state}</div>
+                })}
+                </div>;
 
             return output;
         });
