@@ -24,9 +24,15 @@ class Node {
 
     manhattan(node) {
         //distance between this and the end point
-        const d1 = Math.abs (this.x - node.x);
+        /*const d1 = Math.abs (this.x - node.x);
         const d2 = Math.abs (this.y - node.y);
-        return d1 + d2;
+        return d1 + d2;*/
+        return Math.abs(this.x - node.x) + Math.abs(this.y - node.y);
+    }
+
+    ManhattanDistance(Point, Goal)
+    {	// linear movement - no diagonals - just cardinal directions (NSEW)
+        return Math.abs(Point.x - Goal.x) + Math.abs(Point.y - Goal.y);
     }
 }
 export default Node;

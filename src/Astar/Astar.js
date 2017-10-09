@@ -40,46 +40,74 @@ class Astar {
 
 
         this.open.push(this.start);
-        /*let length;
+        let length;
         while(length = this.open.length) {
-            this.gridCeil(this.open);
-        }*/
-
-        this.gridCeil(this.open[0], 0);
+            this.gridCeil(length);
+        }
 
         console.log("Path:", this.path);
     }
 
-    gridCeil(node, key) {
-        this.open.splice(key);
+    gridCeil(length) {
+
+        let max = this.world_size;
+        let min = -1;
+        for(let i = 0; i < length; i++)
+        {
+            if(this.open[i].f < max)
+            {
+                max = this.open[i].f;
+                min = i;
+            }
+        }
+
+
+        const node = this.open.splice(min, 1)[0];
 this.count++;
 
-if(this.count === 4) {
-    return false;
+if(this.count === 2) {
+    throw new Error();
 }
-        const neighbours = this.neighbourNodes(node);
-
-        neighbours.forEach((item) => {
-            let myPath = new Node(node, item);
-            if (!this.grid[myPath.x][myPath.y].checked) {
-
-                //myPath.end_distance = (node.getEndDistance() + item.getEndDistance());
-                //myPath.g = myNode.g + distanceFunction(item, myNode);
 
 
-                //myPath.start_distance = (myPath.getEndDistance() + item.getEndDistance());
-                //myPath.f = myPath.g + distanceFunction(item, mypathEnd);
 
 
-                console.log("--->", myPath);
+//console.log(this.end, node);
+
+        if(this.end.value === node.value) {
+            console.log("found path");
+        } else {
+            const neighbours = this.neighbourNodes(node);
+
+            neighbours.forEach((item) => {
+                let myPath = new Node(node, item);
+                if (!this.grid[myPath.x][myPath.y].checked) {
+
+                    //console.log(myPath, node);
+
+                    //myPath.end_distance = (node.getEndDistance() + item.getEndDistance());
+                    //myPath.g = myNode.g + distanceFunction(item, myNode);
 
 
-                this.open.push(myPath);
+                    myPath.g = node.g + item.manhattan(node);
 
-                this.grid[myPath.x][myPath.y].checked = true;
-            }
-        });
-        this.closed.push(node);
+
+                    //myPath.start_distance = (myPath.getEndDistance() + item.getEndDistance());
+                    //myPath.f = myPath.g + distanceFunction(item, mypathEnd);
+
+                    myPath.f = myPath.g + item.manhattan(this.end);
+
+
+                    console.log("--->", myPath);
+
+
+                    this.open.push(myPath);
+
+                    this.grid[myPath.x][myPath.y].checked = true;
+                }
+            });
+            this.closed.push(node);
+        }
 
 
 

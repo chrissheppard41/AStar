@@ -32,7 +32,7 @@ class Grid extends Component {
     drawGrid() {
         const astar_algor = new Astar(this.grid);
         astar_algor.startPosition(0,0);
-        astar_algor.endPosition(1,1);
+        astar_algor.endPosition(0,1);
         astar_algor.find();
 
         const path = astar_algor.getPath();
