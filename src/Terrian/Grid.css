@@ -13,3 +13,6 @@
 .col .row.green {
     color: #00ff00;
 }
+.col .row.searched {
+    color: #ff0000;
+}

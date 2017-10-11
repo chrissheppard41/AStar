@@ -8,14 +8,15 @@ class Node {
         this.g = 0;
     }
 
-    /*setFromStartDistance(start_node) {
-        this.start_distance = this.manhattan(start_node);
+    setFromStartDistance(start_node) {
+        console.log();
+        this.f = this.manhattan(start_node);
     }
     setFromEndDistance(end_node) {
-        this.end_distance = this.manhattan(end_node);
+        this.g = this.manhattan(end_node);
     }
 
-    getEndDistance() {
+    /*getEndDistance() {
         return this.end_distance;
     }
     getStartDistance() {
@@ -24,15 +25,7 @@ class Node {
 
     manhattan(node) {
         //distance between this and the end point
-        /*const d1 = Math.abs (this.x - node.x);
-        const d2 = Math.abs (this.y - node.y);
-        return d1 + d2;*/
         return Math.abs(this.x - node.x) + Math.abs(this.y - node.y);
-    }
-
-    ManhattanDistance(Point, Goal)
-    {	// linear movement - no diagonals - just cardinal directions (NSEW)
-        return Math.abs(Point.x - Goal.x) + Math.abs(Point.y - Goal.y);
     }
 }
 export default Node;

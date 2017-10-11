@@ -40,9 +40,13 @@ class Astar {
 
 
         this.open.push(this.start);
-        let length;
-        while(length = this.open.length) {
-            this.gridCeil(length);
+        try {
+            let length;
+            while (length = this.open.length) {
+                this.gridCeil(length);
+            }
+        } catch(error) {
+            console.log(error);
         }
 
         console.log("Path:", this.path);
@@ -65,8 +69,8 @@ class Astar {
         const node = this.open.splice(min, 1)[0];
 this.count++;
 
-if(this.count === 2) {
-    throw new Error();
+if(this.count === 3) {
+    throw new Error("Done");
 }
 
 
@@ -89,16 +93,17 @@ if(this.count === 2) {
                     //myPath.g = myNode.g + distanceFunction(item, myNode);
 
 
-                    myPath.g = node.g + item.manhattan(node);
+                    //myPath.g = node.g + item.manhattan(node);
 
 
                     //myPath.start_distance = (myPath.getEndDistance() + item.getEndDistance());
                     //myPath.f = myPath.g + distanceFunction(item, mypathEnd);
 
-                    myPath.f = myPath.g + item.manhattan(this.end);
+                    //myPath.f = myPath.g + item.manhattan(this.end);
 
-
-                    console.log("--->", myPath);
+                    if(myPath.x === 1 && myPath.y === 0) {
+                        console.log("--->", myPath);
+                    }
 
 
                     this.open.push(myPath);
@@ -139,8 +144,8 @@ if(this.count === 2) {
 
                 if(this.acceptableCeil(i, j)) {
                     const ceil = new Node(ceil_position, {x: i, y: j});
-                    //ceil.setFromStartDistance(ceil_position);
-                    //ceil.setFromEndDistance(this.end);
+                    ceil.setFromStartDistance(ceil_position);
+                    ceil.setFromEndDistance(this.end);
                     map_next_path.push(ceil);
                 }
 

@@ -41,12 +41,16 @@ class Grid extends Component {
             let output = <div key={key} className="col">
                 {item.map((item_2, key_2) => {
                     let colour = " black";
+                    if(item_2.checked) {
+                        colour = " searched";
+                    }
                     if(path[path_count] !== undefined) {
                         if(item_2.position.x === path[path_count].x
                             && item_2.position.y === path[path_count].y) {
                             path_count++;
                             colour = " green";
                         }
+
                     }
                     return <div key={key_2} className={"row" + colour}>{item_2.state}</div>
                 })}
