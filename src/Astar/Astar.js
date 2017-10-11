@@ -41,10 +41,7 @@ class Astar {
 
         this.open.push(this.start);
         try {
-            let length;
-            while (length = this.open.length) {
-                this.gridCeil(length);
-            }
+            this.gridCeil();
         } catch(error) {
             console.log(error);
         }
@@ -52,19 +49,16 @@ class Astar {
         console.log("Path:", this.path);
     }
 
-    gridCeil(length) {
+    gridCeil() {
 
         let max = this.world_size;
         let min = -1;
-        for(let i = 0; i < length; i++)
-        {
-            if(this.open[i].f < max)
-            {
-                max = this.open[i].f;
+        for(let i = 0; i < this.open.length; i++) {
+            if(this.open[i].from_start < max) {
+                max = this.open[i].from_start;
                 min = i;
             }
         }
-
 
         const node = this.open.splice(min, 1)[0];
 this.count++;
@@ -75,40 +69,43 @@ if(this.count === 3) {
 
 
 
-
 //console.log(this.end, node);
 
         if(this.end.value === node.value) {
-            console.log("found path");
+            console.log("found path", node);
+            this.closed.push(node);
+
+            let path = this.closed[this.closed.length - 1];
+            this.path.push({x:node.x, y:node.y});
+            while(path = path.parent) {
+                this.count++;
+
+                this.path.push({x: path.x, y: path.y});
+
+console.log("here");
+
+
+
+
+                if(this.count === 10) {
+                    throw new Error("Done");
+                }
+            }
+
+            return this.path.reverse();
         } else {
             const neighbours = this.neighbourNodes(node);
 
             neighbours.forEach((item) => {
-                let myPath = new Node(node, item);
-                if (!this.grid[myPath.x][myPath.y].checked) {
+                //let myPath = new Node(node, item);
+                if (!this.grid[item.x][item.y].checked) {
 
-                    //console.log(myPath, node);
-
-                    //myPath.end_distance = (node.getEndDistance() + item.getEndDistance());
-                    //myPath.g = myNode.g + distanceFunction(item, myNode);
+                    console.log("--->", item);
 
 
-                    //myPath.g = node.g + item.manhattan(node);
+                    this.open.push(item);
 
-
-                    //myPath.start_distance = (myPath.getEndDistance() + item.getEndDistance());
-                    //myPath.f = myPath.g + distanceFunction(item, mypathEnd);
-
-                    //myPath.f = myPath.g + item.manhattan(this.end);
-
-                    if(myPath.x === 1 && myPath.y === 0) {
-                        console.log("--->", myPath);
-                    }
-
-
-                    this.open.push(myPath);
-
-                    this.grid[myPath.x][myPath.y].checked = true;
+                    this.grid[item.x][item.y].checked = true;
                 }
             });
             this.closed.push(node);
@@ -123,8 +120,8 @@ if(this.count === 3) {
         console.log("Grid", this.grid);*/
 
 
-        return this.open.map((new_node, its_key) => this.gridCeil(new_node, its_key));
-
+        //return this.open.map((new_node, its_key) => this.gridCeil(new_node, its_key));
+        return this.gridCeil();
     }
 
     getMinValue(results) {
@@ -143,7 +140,7 @@ if(this.count === 3) {
                 if(i === (search_x + 1) && j === (search_y + 1)) continue;
 
                 if(this.acceptableCeil(i, j)) {
-                    const ceil = new Node(ceil_position, {x: i, y: j});
+                    let ceil = new Node(ceil_position, {x: i, y: j});
                     ceil.setFromStartDistance(ceil_position);
                     ceil.setFromEndDistance(this.end);
                     map_next_path.push(ceil);
