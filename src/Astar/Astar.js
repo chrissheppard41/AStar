@@ -4,11 +4,12 @@ class Astar {
     constructor(grid) {
         this.grid = grid;
         this.start = null;
-        this.end = null
+        this.end = null;
         this.closed = [];
         this.open = [];
         this.path = [];
         this.count = 0;
+        this.monitor_time = true;
 
         this.world_size = (grid.length * grid[0].length);
     }
@@ -38,15 +39,17 @@ class Astar {
             throw new Error("Please set start or/and end coordinates");
         }
 
-
+        let execution_time = 0;
+        if(this.monitor_time) execution_time = Date.now();
         this.open.push(this.start);
         try {
             this.gridCeil();
         } catch(error) {
             console.log(error);
         }
+        if(this.monitor_time) execution_time = (Date.now() - execution_time) / 1000;
 
-        console.log("Path:", this.path);
+        console.log("Path:", this.path, execution_time + "s");
     }
 
     gridCeil() {
@@ -54,8 +57,14 @@ class Astar {
         let max = this.world_size;
         let min = -1;
         for(let i = 0; i < this.open.length; i++) {
-            if(this.open[i].from_start < max) {
+            // this check monitors the distance from the start, takes the shortest distance
+            /*if(this.open[i].from_start < max) {
                 max = this.open[i].from_start;
+                min = i;
+            }*/
+            // this check monitors the distance to the end, takes the shortest distance
+            if(this.open[i].to_end > max) {
+                max = this.open[i].to_end;
                 min = i;
             }
         }
@@ -63,7 +72,7 @@ class Astar {
         const node = this.open.splice(min, 1)[0];
 this.count++;
 
-if(this.count === 3) {
+if(this.count === this.world_size) {
     throw new Error("Done");
 }
 
@@ -82,12 +91,12 @@ if(this.count === 3) {
 
                 this.path.push({x: path.x, y: path.y});
 
-console.log("here");
+//console.log("here");
 
 
 
 
-                if(this.count === 10) {
+                if(this.count === this.world_size * 2) {
                     throw new Error("Done");
                 }
             }
@@ -100,7 +109,7 @@ console.log("here");
                 //let myPath = new Node(node, item);
                 if (!this.grid[item.x][item.y].checked) {
 
-                    console.log("--->", item);
+                    //console.log("--->", item);
 
 
                     this.open.push(item);
@@ -154,8 +163,8 @@ console.log("here");
 
     acceptableCeil(x, y) {
         return (
-            (x >= 0 && x <= this.grid.length)
-            && (y >= 0 && y <= this.grid[0].length)
+            (x >= 0 && x < this.grid.length)
+            && (y >= 0 && y < this.grid[0].length)
         ) && this.grid[x][y].state === 0;
     }
 

@@ -1,13 +1,13 @@
 .col {
     width: 100%;
     clear: both;
-    height: 10px;
+    height: 15px;
 }
 
 .col .row {
     float: left;
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
 }
 
 .col .row.green {

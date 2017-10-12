@@ -6,8 +6,8 @@ class Grid extends Component {
     constructor(props) {
         super(props);
 
-        this.width = 16;
-        this.height = 16;
+        this.width = 32;
+        this.height = 32;
         this.grid = this.createGrid();
     }
 
@@ -18,9 +18,13 @@ class Grid extends Component {
             for(let j = 0; j < x[i].length; j++) {
 
                 let state = 0;
-                /*if(i === 1 && j === 1) {
+                /*if(i === 5 && j === 5) {
                     state = 1;
                 }*/
+                let random = Math.random();
+                if (random < 0.2) {
+                    state = 1;
+                }
 
                 x[i][j] = {state: state, position: {x:i,y:j}, checked: false};
             }
@@ -32,7 +36,7 @@ class Grid extends Component {
     drawGrid() {
         const astar_algor = new Astar(this.grid);
         astar_algor.startPosition(0,0);
-        astar_algor.endPosition(0,1);
+        astar_algor.endPosition(15,15);
         astar_algor.find();
 
         const path = astar_algor.getPath();
