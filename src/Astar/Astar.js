@@ -181,7 +181,7 @@ class Astar {
      * @param node the current node it's on which will be the end location
      * @returns {Array.<*>}
      */
-    mapFinishedPath(path, node) {console.log(path);
+    mapFinishedPath(path, node) {
         let finishPath = [];
         let stopCounter = 0;
         finishPath.push({x:node.x, y:node.y});
