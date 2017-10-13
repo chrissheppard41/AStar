@@ -43,13 +43,35 @@ class Astar {
         if(this.monitor_time) execution_time = Date.now();
         this.open.push(this.start);
         try {
-            this.gridCeil();
+            const startOk = this.okToGo(this.start);
+            const endOk = this.okToGo(this.end);
+
+            if(startOk && endOk) {
+                this.gridCeil();
+            } else {
+                console.log("The start and/or end locations are blocked, do nothing");
+            }
         } catch(error) {
             console.log(error);
         }
         if(this.monitor_time) execution_time = (Date.now() - execution_time) / 1000;
 
         console.log("Path:", this.path, execution_time + "s");
+    }
+
+    okToGo(node) {
+        if(this.grid[node.x][node.y].state === 0) {
+            return false;
+        }
+        const neighbours = this.neighbourNodes(node);
+        let count = neighbours.length;
+        neighbours.map((item) => {
+            if(this.grid[item.x][item.y].state === 0) {
+                count--;
+            }
+        });
+
+        return (count !== neighbours.length);
     }
 
     gridCeil() {

@@ -18,13 +18,13 @@ class Grid extends Component {
             for(let j = 0; j < x[i].length; j++) {
 
                 let state = 0;
-                /*if(i === 5 && j === 5) {
-                    state = 1;
-                }*/
-                let random = Math.random();
-                if (random < 0.2) {
+                if(i === 15 && j === 15) {
                     state = 1;
                 }
+                /*let random = Math.random();
+                if (random < 0.1) {
+                    state = 1;
+                }*/
 
                 x[i][j] = {state: state, position: {x:i,y:j}, checked: false};
             }
@@ -54,7 +54,6 @@ class Grid extends Component {
                             path_count++;
                             colour = " green";
                         }
-
                     }
                     return <div key={key_2} className={"row" + colour}>{item_2.state}</div>
                 })}
