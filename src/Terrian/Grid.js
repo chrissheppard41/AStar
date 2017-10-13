@@ -18,15 +18,12 @@ class Grid extends Component {
             for(let j = 0; j < x[i].length; j++) {
 
                 let state = 0;
-                if(i === 15 && j === 15) {
-                    state = 1;
+                let random = Math.random();
+                if (random < 0.2) {
+                    state = 2;
                 }
-                /*let random = Math.random();
-                if (random < 0.1) {
-                    state = 1;
-                }*/
 
-                x[i][j] = {state: state, position: {x:i,y:j}, checked: false};
+                x[i][j] = {state: state, position: {x:i,y:j}};
             }
         }
 
@@ -35,38 +32,69 @@ class Grid extends Component {
 
     drawGrid() {
         const astar_algor = new Astar(this.grid);
-        astar_algor.startPosition(0,0);
-        astar_algor.endPosition(15,15);
+
+        const start = {
+            x: Math.floor((Math.random() * this.width)),
+            y: Math.floor((Math.random() * this.height))
+        };
+        const end = {
+            x: Math.floor((Math.random() * this.width)),
+            y: Math.floor((Math.random() * this.height))
+        };
+
+        astar_algor.startPosition(start.x,start.y);
+        astar_algor.endPosition(end.x,end.y);
         astar_algor.find();
 
         const path = astar_algor.getPath();
-        let path_count = 0;
-        return this.grid.map((item, key) => {
+        return <div>{this.grid.map((item, key) => {
             let output = <div key={key} className="col">
                 {item.map((item_2, key_2) => {
                     let colour = " black";
-                    if(item_2.checked) {
+                    let font = "";
+
+                    //for debugging purposes, it's used to see what nodes are checked on the grid, needs reset to be turned off in A*
+                    /*if(astar_algor.checkedList[(item_2.position.x + (item_2.position.y * this.width))]) {
                         colour = " searched";
+                    }*/
+                    if(this.displayFoundPath(path, item_2.position.x, item_2.position.y)) {
+                        colour = " green";
                     }
-                    if(path[path_count] !== undefined) {
-                        if(item_2.position.x === path[path_count].x
-                            && item_2.position.y === path[path_count].y) {
-                            path_count++;
-                            colour = " green";
-                        }
+
+                    if(item_2.position.x === end.x
+                        && item_2.position.y === end.y) {
+                        font = " bold";
                     }
-                    return <div key={key_2} className={"row" + colour}>{item_2.state}</div>
+
+                    if(item_2.position.x === start.x
+                        && item_2.position.y === start.y) {
+                        font = " italic";
+                    }
+                    return <div key={key_2} className={"row" + colour + font}>{item_2.state}</div>
                 })}
                 </div>;
 
             return output;
+        })}{astar_algor.reset()}
+            <div className="info">
+                <div>Start location: x: {start.x}, y: {start.y}</div>
+                <div>End location: x: {end.x}, y: {end.y}</div>
+                <div>If the Start and/or End points are blocked the path wont render</div>
+            </div>
+        </div>;
+    }
+    displayFoundPath(path, x, y) {
+        let colour = false;
+        path.forEach(item => {
+            if(item.x === x && item.y === y) {
+                colour = true;
+            }
         });
+
+        return colour;
     }
 
     render() {
-        //this.startPosition();
-        //this.endPosition();
-
         return (
             <div className="Grid">
                 {this.drawGrid()}

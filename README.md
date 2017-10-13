@@ -1,6 +1,58 @@
 # A Star project
 
-The basic A star algorithm for a simple 2d grid layout
+The basic A* algorithm for a simple 2d grid layout
+
+## Basic use
+
+A* is the class to use
+
+1. Generate a world grid and pass the world grid into A*
+
+
+        const astar_algor = new Astar(world_grid);
+
+2. Please pass in a multidimensional array in as the A* algorithm will use that as the bases for generation. 0 or 1 is passable, 2 and above are not.
+
+
+    createGrid() {
+        let x = new Array(this.width);
+        for (let i = 0; i < x.length; i++) {
+            x[i] = new Array(this.height);
+            for(let j = 0; j < x[i].length; j++) {
+
+                let state = 0;
+                let random = Math.random();
+                if (random < 0.2) {
+                    state = 2;
+                }
+
+                x[i][j] = {state: state, position: {x:i,y:j}, checked: false};
+            }
+        }
+
+        return x;
+    }
+
+This is the function I've used, it sets the grid up, adding in obstacles to block the path
+
+3. Set the start and end location
+
+
+        astar_algor.startPosition(start.x,start.y);
+        astar_algor.endPosition(end.x,end.y);
+        
+4. Execute the find function, it will return a array path, if it doesn't, check the console, errors will be outputted there
+
+
+        astar_algor.find();
+
+5. Make sure the reset call has been made, the only thing that needs to be saved at the very end is the path array
+
+6. Pass that into whatever object you'd like. That's it
+
+
+Uses react as the renderer, nothing more, to start this app execute the start command in command line
+
 
 ## React information:
 
